@@ -4,8 +4,11 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/q.js/1.1.2/q.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="//cdn.rawgit.com/objectivehtml/FlipClock/master/compiled/flipclock.min.js"></script>
 <script type="text/javascript" src="static/grenadine.js"></script>
+<link rel="stylesheet" href="//cdn.rawgit.com/objectivehtml/FlipClock/master/compiled/flipclock.css">
 <script type="text/javascript" charset="utf-8">
+
 jQuery.each( [ "put", "delete" ], function( i, method ) {
   jQuery[ method ] = function( url, data, callback, type ) {
     if ( jQuery.isFunction( data ) ) {
@@ -139,6 +142,11 @@ $('document').ready(function () {
   width: 98%;
   height: 300px;
 }
+.clock {
+    width: 100%;
+    position: absolute;
+    left: 400px;
+}
 </style>
 </head>
 <body>
@@ -148,6 +156,7 @@ $('document').ready(function () {
   <div id="command-editor" class="commands"></div>
   <div id="execute" class="cmd">Execute</div>
   <div id="clear" class="cmd">Clear all</div>
+  <div id="clock" class="clock"></div>
 
 </body>
 </html>

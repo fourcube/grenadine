@@ -1,10 +1,30 @@
 Grenadine = function(initialWait) {
+  var showClock = function (time) {
+    if (time > 1000) {
+        var clock = $('#clock').FlipClock(Math.floor(time / 1000), {
+          autostart: false,
+          clockFace: 'Counter'
+        });
+
+    		clock.interval = setInterval(function() {
+    			clock.decrement();
+    		}, 1000);
+
+        return clock;
+    }
+  }
   var timeoutPromise = function(time) {
     return function () {
       var deferred = Q.defer()
 
+      clock = showClock(time);
+
       setTimeout(function () {
         console.debug("Completed wait of", time, "milliseconds");
+        if(clock) {          
+          clearInterval(clock.interval);
+        }
+
         deferred.resolve();
       }, time);
 
