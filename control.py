@@ -20,8 +20,8 @@ pinMap = {
     17: 26
 }
 
-ON = 0
-OFF = 1
+ON = 1
+OFF = 0
 pinsInitialized = False
 notificationFn = None
 
