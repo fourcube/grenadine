@@ -73,7 +73,7 @@ Grenadine = function(initialWait) {
 
     $.each(args, function (_,pin) {
       queue(activatePromise(pin));
-      queue(timeoutPromise(100));
+      queue(timeoutPromise(600));
       queue(deactivatePromise(pin));
     });
 
