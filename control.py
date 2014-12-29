@@ -30,7 +30,7 @@ try:
 except ImportError:
     rpi_mode = False
     for p in list(pinMap.keys()):
-        rpiStatus[p] = OFF
+        rpiStatus[p] = 0
 
 
 
@@ -58,8 +58,8 @@ def clear():
         global rpiStatus
         global OFF
         for k in rpiStatus.keys():
-            rpiStatus[k] = OFF
-        
+            rpiStatus[k] = 0
+
         return
 
     for logicalPin, physicalPin in pinMap.iteritems():
@@ -72,7 +72,7 @@ def set_state(logicalPin, state):
 
     global rpi_mode
     if not rpi_mode:
-        rpiStatus[logicalPin] = state
+        rpiStatus[logicalPin] = 0 if state == OFF else 1
         notificationFn()
         return
 

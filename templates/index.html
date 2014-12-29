@@ -88,8 +88,13 @@ var execute = function () {
 $('document').ready(function () {
   $('#clear').on('click', clearAll);
   $('#execute').on('click', execute);
-  $.get('static/demo.js').done(function (data) {
-    $('#command-editor').val(data);
+
+  $.ajax({
+    url : "static/demo.js",
+    dataType: "text",
+    success : function (data) {
+      $('#command-editor').val(data);
+    }
   });
 });
 
