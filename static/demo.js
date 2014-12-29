@@ -7,8 +7,8 @@ Grenadine(1000)
   .wait(15000)
   .trigger(2) // Gold Stars
   .wait(14000)
-  .trigger(3)
+  .trigger(3) // Runde Fontäne
   .wait(5000)
-  .trigger(4)
+  .trigger(4) // Eckige Fontäne
   .clear()
   .exec();
