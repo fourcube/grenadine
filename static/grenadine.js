@@ -12,10 +12,11 @@ Grenadine = function(initialWait) {
     }
   };
 
-  var activationPromise = function (pin) {
+  var activatePromise = function (pin) {
     return function () {
       var deferred = Q.defer()
 
+      console.debug("Activating", pin, ".")
       $.post('/pin/' + pin)
         .done(deferred.resolve)
         .fail(deferred.resolve);
@@ -23,6 +24,19 @@ Grenadine = function(initialWait) {
       return deferred.promise;
     }
   };
+
+  var deactivatePromise = function (pin) {
+      return function () {
+        var deferred = Q.defer()
+
+        console.debug("Deactivating", pin, ".")
+        $.delete('/pin/' + pin)
+          .done(deferred.resolve)
+          .fail(deferred.resolve);
+
+        return deferred.promise;
+      }
+    };
 
   var clearingPromise = function () {
     return function () {
@@ -54,12 +68,13 @@ Grenadine = function(initialWait) {
     return this;
   };
 
-  _Control.activate = function (pin) {
+  _Control.trigger = function (pin) {
     var args = Array.prototype.slice.call(arguments);
-    console.debug("Queueing", args.length, "pin activations.", args);
 
     $.each(args, function (_,pin) {
-      queue(activationPromise(pin));
+      queue(activatePromise(pin));
+      queue(timeoutPromise(100));
+      queue(deactivatePromise(pin));
     });
 
     return this;

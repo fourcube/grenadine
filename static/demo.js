@@ -1,5 +1,9 @@
 Grenadine(1000)
   .clear()
-  .activate(1)
-  .wait(3000)
-  .activate(2);
+  .wait(2000)
+  .trigger(0)
+  .wait(1500)
+  .trigger(1)
+  .wait(1000)
+  .clear()
+  .exec();
