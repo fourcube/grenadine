@@ -18,8 +18,8 @@ pinMap = {
     17: 26
 }
 
-ON = 1
-OFF = 0
+ON = 0
+OFF = 1
 pinsInitialized = False
 notificationFn = None
 rpiStatus = {}
@@ -27,15 +27,16 @@ rpiStatus = {}
 try:
     from RPi import GPIO
     rpi_mode = True
-    for p in list(pinMap.keys()):
-        rpiStatus[p] = OFF
 except ImportError:
     rpi_mode = False
+    for p in list(pinMap.keys()):
+        rpiStatus[p] = OFF
 
 
 
 
 def init_pins():
+    global rpi_mode
     if not rpi_mode:
         return
 
@@ -52,6 +53,7 @@ def init_pins():
     pinsInitialized = True
 
 def clear():
+    global rpi_mode
     if not rpi_mode:
         global rpiStatus
         global OFF
@@ -68,6 +70,7 @@ def set_state(logicalPin, state):
     global notificationFn
     global pinStatus
 
+    global rpi_mode
     if not rpi_mode:
         rpiStatus[logicalPin] = state
         notificationFn()
@@ -75,18 +78,20 @@ def set_state(logicalPin, state):
 
     physicalPin = pinMap[logicalPin]
 
-    print "Setting %s to %s." % logicalPin % state
+    #print "Setting %s to %s." % logicalPin % state
     GPIO.output(physicalPin, state)
 
-    notificationFn(list(pinMap.keys()))
+    notificationFn()
 
 def cleanup():
+    global rpi_mode
     if not rpi_mode:
         return
 
     GPIO.cleanup()
 
 def getStatus():
+    global rpi_mode
     if not rpi_mode:
         global rpiStatus
         return rpiStatus
