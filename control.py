@@ -1,5 +1,3 @@
-from RPi import GPIO
-
 pinMap = {
     0: 3,
     1: 5,
@@ -24,8 +22,23 @@ ON = 1
 OFF = 0
 pinsInitialized = False
 notificationFn = None
+rpiStatus = {}
+
+try:
+    from RPi import GPIO
+    rpi_mode = True
+    for p in list(pinMap.keys()):
+        rpiStatus[p] = OFF
+except ImportError:
+    rpi_mode = False
+
+
+
 
 def init_pins():
+    if not rpi_mode:
+        return
+
     global pinsInitialized
     if pinsInitialized == True:
         return
@@ -35,34 +48,60 @@ def init_pins():
         print "Setting up output pin %s." % physicalPin
         GPIO.setup(physicalPin, GPIO.OUT)
         GPIO.output(physicalPin, OFF)
-    
+
     pinsInitialized = True
 
 def clear():
+    if not rpi_mode:
+        global rpiStatus
+        global OFF
+        for k in rpiStatus.keys():
+            rpiStatus[k] = OFF
+        
+        return
+
     for logicalPin, physicalPin in pinMap.iteritems():
         GPIO.output(physicalPin, OFF)
 
-def activate(logicalPin):
-    global ON
-    global OFF
+def set_state(logicalPin, state):
     global pinMap
     global notificationFn
+    global pinStatus
+
+    if not rpi_mode:
+        rpiStatus[logicalPin] = state
+        notificationFn()
+        return
 
     physicalPin = pinMap[logicalPin]
-    for l, p in pinMap.iteritems():
-        if l != logicalPin:
-            GPIO.output(p, OFF)
-            continue
 
-        if l == logicalPin:
-            print "Activating %s." % l
-            GPIO.output(p, ON)
-            continue
-    
-    notificationFn(list(pinMap.keys()))    
+    print "Setting %s to %s." % logicalPin % state
+    GPIO.output(physicalPin, state)
+
+    notificationFn(list(pinMap.keys()))
 
 def cleanup():
+    if not rpi_mode:
+        return
+
     GPIO.cleanup()
+
+def getStatus():
+    if not rpi_mode:
+        global rpiStatus
+        return rpiStatus
+
+    pinStatus = {}
+    logicalPins = list(pinMap.keys())
+    global ON
+    global OFF
+    for l in logicalPins:
+        physicalPin = pinMap[l]
+        status = GPIO.input(physicalPin) if rpi_mode else OFF
+        pinStatus[l] = True if status == ON else False
+
+    return pinStatus
+
 
 def registerObserver(fn):
     global notificationFn
