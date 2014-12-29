@@ -3,6 +3,7 @@
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.3.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/q.js/1.1.2/q.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" src="static/grenadine.js"></script>
 <script type="text/javascript" charset="utf-8">
 jQuery.each( [ "put", "delete" ], function( i, method ) {
@@ -80,20 +81,26 @@ socket.on('update', function(data) {
 });
 
 
-var execute = function () {
-  var code = $('#command-editor').val();
+var execute = function (editor) {
+  var code = editor.getValue();
   eval(code);
 }
 
 $('document').ready(function () {
   $('#clear').on('click', clearAll);
-  $('#execute').on('click', execute);
+
+
+  var editor = ace.edit("command-editor");
+  editor.setTheme("ace/theme/github");
+  editor.getSession().setMode("ace/mode/javascript");
+  $('#execute').on('click', execute.bind(this, editor));
 
   $.ajax({
     url : "static/demo.js",
     dataType: "text",
     success : function (data) {
-      $('#command-editor').val(data);
+      editor.setValue(data);
+      editor.clearSelection();
     }
   });
 });
@@ -137,7 +144,8 @@ $('document').ready(function () {
 <body>
   <div id="pins">
   </div>
-  <textarea id="command-editor" class="commands" value=""></textarea>
+
+  <div id="command-editor" class="commands"></div>
   <div id="execute" class="cmd">Execute</div>
   <div id="clear" class="cmd">Clear all</div>
 
