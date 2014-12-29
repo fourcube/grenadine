@@ -9,7 +9,7 @@ from flask.ext.socketio import SocketIO, emit
 from functools import partial
 
 app = Flask(__name__)
-app.debug = True
+#app.debug = True
 socketio = SocketIO(app)
 
 @app.route("/pin/<int:logicalPin>", methods=["POST"])
