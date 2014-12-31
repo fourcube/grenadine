@@ -21,7 +21,7 @@ Grenadine = function(initialWait) {
 
       setTimeout(function () {
         console.debug("Completed wait of", time, "milliseconds");
-        if(clock) {          
+        if(clock) {
           clearInterval(clock.interval);
         }
 
@@ -93,7 +93,7 @@ Grenadine = function(initialWait) {
 
     $.each(args, function (_,pin) {
       queue(activatePromise(pin));
-      queue(timeoutPromise(1000));
+      queue(timeoutPromise(500));
       queue(deactivatePromise(pin));
     });
 

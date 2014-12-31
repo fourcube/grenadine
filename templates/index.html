@@ -99,7 +99,7 @@ $('document').ready(function () {
   $('#execute').on('click', execute.bind(this, editor));
 
   $.ajax({
-    url : "static/demo.js",
+    url : "static/newyear.js",
     dataType: "text",
     success : function (data) {
       editor.setValue(data);
