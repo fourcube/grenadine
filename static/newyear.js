@@ -14,6 +14,6 @@ Grenadine(1000)
   .wait(44000)
   .trigger(6) // Apocalypse
   .wait(1000)
-  .trigger(7)
+  .trigger(7) // Gotcha
   .clear()
   .exec();
